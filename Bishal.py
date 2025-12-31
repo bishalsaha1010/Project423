@@ -11,7 +11,6 @@ speed_boost_duration = 500  # frames or ticks
 
 auto_pilot = False
 
-# ===== DRAWING FUNCTIONS =====
 
 def draw_road():
     glPushMatrix()
@@ -53,39 +52,44 @@ def draw_road():
             glEnd()
         
     glPopMatrix()
-
-def draw_shield(x, y, z):
+def draw_heart(x, y, z):
     glPushMatrix()
     glTranslatef(x, y, z)
 
-    # Outer shield sphere
-    glColor3f(0.0, 0.6, 1.0)
-    glutSolidSphere(8, 16, 16)
+    glColor3f(1.0, 0.0, 0.0)
 
-    # Decorative shield rings
-    glColor3f(0.2, 0.8, 1.0)
+    quad = gluNewQuadric()
+
     glPushMatrix()
-    glTranslatef(0, -2, 0)
+    glTranslatef(-4, 3, 0)
     glRotatef(90, 1, 0, 0)
-    gluCylinder(gluNewQuadric(), 11, 11, 1.5, 24, 1)
+    gluCylinder(quad, 3, 3, 4, 12, 1)
     glPopMatrix()
 
-    glColor3f(0.1, 0.7, 0.9)
     glPushMatrix()
-    glTranslatef(0, 3, 0)
+    glTranslatef(4, 3, 0)
     glRotatef(90, 1, 0, 0)
-    gluCylinder(gluNewQuadric(), 13, 13, 1.5, 24, 1)
+    gluCylinder(quad, 3, 3, 4, 12, 1)
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(0, -1, 0)
+    glScalef(1.3, 1.6, 0.8)
+    glutSolidCube(8)
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(0, -7, 0)
+    glScalef(0.4, 1.4, 0.6)
+    glutSolidCube(8)
     glPopMatrix()
 
     glPopMatrix()
-
 
 def draw_speedboost(x, y, z):
     glPushMatrix()
     glTranslatef(x, y, z)
 
-    glColor3f(1.0, 1.0, 0.0)
-    glutSolidSphere(7, 16, 16)
 
     glColor3f(1.0, 0.8, 0.0)
     glPushMatrix()
@@ -107,17 +111,68 @@ def draw_speedboost(x, y, z):
     glRotatef(90, 1, 0, 0)
     gluCylinder(gluNewQuadric(), 11, 11, 1.5, 20, 1)
     glPopMatrix()
-
+    
     glPopMatrix()
 
+    glColor3f(1.0, 0.6, 0.0)
+    glPushMatrix()
+    glTranslatef(0, 6, 0)
+    glRotatef(-90, 1, 0, 0)
+    gluCylinder(gluNewQuadric(), 11, 11, 1.5, 20, 1)
+    glPopMatrix()
+
+
+def draw_shield(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+
+    glColor3f(0.0, 0.7, 1.0)
+    glPushMatrix()
+    glRotatef(90, 1, 0, 0)
+    gluCylinder(gluNewQuadric(), 14, 14, 2, 32, 1)
+    glPopMatrix()
+
+    glColor3f(0.2, 0.9, 1.0)
+    glPushMatrix()
+    glRotatef(90, 1, 0, 0)
+    gluCylinder(gluNewQuadric(), 10, 10, 2, 32, 1)
+    glPopMatrix()
+
+    glColor3f(0.3, 1.0, 1.0)
+    bars = [
+        (-10, 0, 0),
+        ( 10, 0, 0),
+        ( 0, 0, -10),
+        ( 0, 0, 10),
+    ]
+
+    for bx, by, bz in bars:
+        glPushMatrix()
+        glTranslatef(bx, by, bz)
+        glScalef(1.5, 12, 1.5)
+        glutSolidCube(1)
+        glPopMatrix()
+
+    glColor3f(0.1, 0.5, 0.8)
+    glPushMatrix()
+    glTranslatef(0, -6, 0)
+    glScalef(8, 1, 8)
+    glutSolidCube(1)
+    glPopMatrix()
+
+    glPopMatrix()
 
 def draw_powerup(x, y, z, ptype):
     glPushMatrix()
     glTranslatef(x, y, z)
 
-    if ptype == 1:    # Shield
+    if ptype == 0:      # Health
+        draw_heart(0, 0, 0)
+
+    elif ptype == 1:    # Shield
         draw_shield(0, 0, 0)
-    elif ptype == 2:  # Speed Boost
+
+    elif ptype == 2:    # Speed Boost
         draw_speedboost(0, 0, 0)
 
     glPopMatrix()
@@ -126,13 +181,14 @@ def draw_powerup(x, y, z, ptype):
 powerups = []  # Format: [x, y, z, type]
 powerup_spawn_timer = 0
 
+
 def spawn_powerup():
+    
     x = random.randint(-int(rastar_width/2) + 20, int(rastar_width/2) - 20)
-    ptype = random.choice([1, 2])  # Only shield or speed boost
-    powerups.append([x, 30, 700, ptype])
+    ptype = random.randint(0, 2)
+    powerups.append([x, 30,700, ptype])
 
 
-# ===== AUTO-PILOT LOGIC =====
 def autopilot_cheat():
     global garir_x
 
@@ -389,4 +445,5 @@ def specialKeyListener(key, x, y):
     elif key == GLUT_KEY_RIGHT:
         camera_x_offset -= 15
         if camera_x_offset < cam_right:
+
             camera_x_offset = cam_right
