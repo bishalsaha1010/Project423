@@ -1,15 +1,71 @@
 # ===== Bishal Saha =====
 
-# Power-up states
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+import random
+import time
+
+WINDOW_WIDTH, WINDOW_HEIGHT = 1000, 800
+
+view_mode = 0  # 0: Third-person, 1: First-person, 2: Dynamic
+camera_pos = (0, 200, -300)
+cam_zoom = 0
+camera_x_offset = 0  # Horizontal
+cam_right = -200  # Left threshold
+cam_left = 200   # Right threshold
+fovY = 60
+
+khela_choltese = True
+pause = False
+auto_pilot = False
+khela_sesh = False
+
+player_jibon = 3
+max_jibon = 5
+score = 0
+level = 1
+
+p_speed=10
+
+
+garir_y = 10
+garir_z = 200
+garir_speed = 5
+garir_width = 30
+garir_length = 50
+player_speed=garir_speed
+
+garir_x = 0
+garir_y = 10
+garir_z = 200
+garir_speed = 5
+garir_width = 30
+garir_length = 50
+p_speed=garir_speed
+
+rastar_width = 200
+
+segment_length = 1000 
+road_segments = [(i - 5 // 2) * segment_length for i in range(1,6,1)]
+
+
+enemies = []  #  [x, y, z, type]
+enemy_speed =1.2
+enemy_spawn_timmer = 0
+enemy_spawn_rate = 30  
+
+powerups = []  #  [x, y, z, type]
+powerup_spawn_timer = 0
+# Types: 0=health, 1=shield, 2=speed_boost
+
 shield_active = False
 shield_timer = 0
-shield_duration = 1000  # frames or ticks
+shield_duration = 1000 
 
 speed_boost_active = False
 speed_boost_timer = 0
-speed_boost_duration = 500  # frames or ticks
-
-auto_pilot = False
+speed_boost_duration = 500
 
 
 def draw_road():
@@ -447,3 +503,4 @@ def specialKeyListener(key, x, y):
         if camera_x_offset < cam_right:
 
             camera_x_offset = cam_right
+
