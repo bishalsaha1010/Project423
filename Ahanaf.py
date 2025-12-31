@@ -515,7 +515,7 @@ def main():
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
     glutInitWindowPosition(100, 50)
-    glutCreateWindow(b"Car Rush - 3D Endless Driving Survival Game")
+    glutCreateWindow(b"Car Rush - 3D Driving Survival Game")
     
     glEnable(GL_DEPTH_TEST)
     
@@ -531,4 +531,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
