@@ -1,7 +1,6 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-import random
 
 collision_flash = 0
 screen_shake = 0
